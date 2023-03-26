@@ -1,24 +1,30 @@
 #!/usr/bin/env node
 
-const http = require("http");
+import "reflect-metadata";
 
-const debug = require("debug")("ads-cloud-computing-dbaas:server");
+import debug from "debug";
+import { createServer } from "http";
+import App from "./app";
 
-const app = require("./app")();
+const debugLogger = debug("ads-cloud-computing-dbaas:server");
 
-const port = +process.env.PORT || 3000;
+const app = App();
+
+const port = +(process.env.PORT || 3000);
 app.set("port", port);
 
-const server = http.createServer(app);
+const server = createServer(app);
 server.listen(port);
 
 server.on("error", (error) => {
+  // @ts-ignore
   if (error.syscall !== "listen") {
     throw error;
   }
 
   const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
+  // @ts-ignore
   switch (error.code) {
     case "EACCES":
       console.error(bind + " requires elevated privileges");
@@ -35,6 +41,6 @@ server.on("error", (error) => {
 
 server.on("listening", () => {
   const addr = server.address();
-  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
-  debug("Listening on " + bind);
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr?.port;
+  debugLogger("Listening on " + bind);
 });

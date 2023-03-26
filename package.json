@@ -6,20 +6,31 @@
     "node": ">= 18.0.0"
   },
   "scripts": {
-    "start": "node ./app/server.js",
-    "start:dev": "nodemon ./app/server.js"
+    "build": "rimraf dist && tsc",
+    "start": "node ./dist/server.js",
+    "start:dev": "ts-node-dev ./src/server.ts"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "^3.1.9",
     "express": "~4.18.2",
     "firebase-admin": "^11.5.0",
     "http-errors": "~1.6.3",
-    "joi": "^17.9.1",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.7.0",
+    "typescript": "^5.0.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "@types/cookie-parser": "^1.4.3",
+    "@types/debug": "^4.1.7",
+    "@types/http-errors": "^2.0.1",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^18.15.10",
+    "rimraf": "^4.4.1",
+    "ts-node-dev": "^2.0.0"
   }
 }
