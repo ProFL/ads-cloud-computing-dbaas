@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tasks</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1>Tasks</h1>
+    <form method="POST" action="/tasks">
+      <input name="title" placeholder="Title" type="text" />
+      <input type="submit" value="Create" />
+    </form>
+    <br />
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Done</th>
+      </tr>
+      <% tasks.forEach(t => { %>
+        <% if (t.done) { %>
+        <tr style="text-decoration: line-through;">
+          <td><%= t.id %></td>
+          <td><%= t.title %></td>
+          <td><input id="checkbox-<%= t.id %>" type="checkbox" <% if(t.done) { %> checked <% } %> /></td>
+        </tr>
+        <% } else { %>
+        <tr>
+          <td><%= t.id %></td>
+          <td><%= t.title %></td>
+          <td><input id="checkbox-<%= t.id %>" type="checkbox" <% if(t.done) { %> checked <% } %> /></td>
+        </tr>
+        <% } %>
+      <% }) %>
+    </table>
+    <script>
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', event => {
+          const id = event.target.id.split('-')[1];
+          fetch(`/tasks/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ done: event.target.checked })
+          }).then(response => {
+            if (response.status === 200) {
+              window.location.reload()
+            } else {
+              console.log('Error updating task');
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
